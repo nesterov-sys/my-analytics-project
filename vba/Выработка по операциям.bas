@@ -5,7 +5,7 @@ Sub GenerateAllReportsSideBySide()
     On Error GoTo ErrorHandler
 
     If ActiveWorkbook Is Nothing Then
-        MsgBox "Нет активной рабочей книги!", vbCritical
+        MsgBox "РќРµС‚ Р°РєС‚РёРІРЅРѕР№ СЂР°Р±РѕС‡РµР№ РєРЅРёРіРё!", vbCritical
         Exit Sub
     End If
 
@@ -18,7 +18,7 @@ Sub GenerateAllReportsSideBySide()
     Dim col As Long
 
     On Error Resume Next
-    hoursValue = Application.InputBox("Введите количество часов для расчёта:", "Часы работы", 11, Type:=1)
+    hoursValue = Application.InputBox("Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ С‡Р°СЃРѕРІ РґР»СЏ СЂР°СЃС‡С‘С‚Р°:", "Р§Р°СЃС‹ СЂР°Р±РѕС‚С‹", 11, Type:=1)
     If hoursValue = 0 Then Exit Sub
     On Error GoTo 0
 
@@ -26,55 +26,55 @@ Sub GenerateAllReportsSideBySide()
     Application.Calculation = xlCalculationManual
 
     If Not SheetExists("TDSheet", ActiveWorkbook) Then
-        MsgBox "Лист TDSheet не найден в активной книге!", vbExclamation
+        MsgBox "Р›РёСЃС‚ TDSheet РЅРµ РЅР°Р№РґРµРЅ РІ Р°РєС‚РёРІРЅРѕР№ РєРЅРёРіРµ!", vbExclamation
         GoTo CleanUp
     End If
 
-    Set wsReport = CreateOrClearReportSheet("Сводный отчет", ActiveWorkbook)
+    Set wsReport = CreateOrClearReportSheet("РЎРІРѕРґРЅС‹Р№ РѕС‚С‡РµС‚", ActiveWorkbook)
     Set wsTD = ActiveWorkbook.Sheets("TDSheet")
 
     lastRowTD = wsTD.Cells(wsTD.Rows.Count, "A").End(xlUp).Row
     For i = DATA_START_ROW To lastRowTD
-        If wsTD.Cells(i, 1).Value = "Итого" Then
+        If wsTD.Cells(i, 1).Value = "РС‚РѕРіРѕ" Then
             lastRowTD = i - 1
             Exit For
         End If
     Next i
 
     If lastRowTD < DATA_START_ROW Then
-        MsgBox "Нет данных для обработки!", vbExclamation
+        MsgBox "РќРµС‚ РґР°РЅРЅС‹С… РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё!", vbExclamation
         GoTo CleanUp
     End If
 
-    ' ===МЕТРИКИ И НОРМЫ ===
+    ' ===РњР•РўР РРљР Р РќРћР РњР« ===
     ReDim metrics(0 To 24)
-    metrics(0) = "01 Отбор ECOM (шт)"
-    metrics(1) = "02 Групповой отбор ECOM (шт)"
-    metrics(2) = "03 Отбор ECOM экспресс (шт)"
-    metrics(3) = "04 Отбор контейнера (конт)"
-    metrics(4) = "05 Отбор ТТ ( магазин+ТЕС+Реклама) (шт)"
-    metrics(5) = "06 Перемещение товара (конт)"
-    metrics(6) = "07 Перемещение контейнеров (конт)"
-    metrics(7) = "08 Приемка без КИЗ (шт)"
-    metrics(8) = "09 Приемка с КИЗ (шт)"
-    metrics(9) = "10_1 Размещение (шт)"
-    metrics(10) = "11 Размещение (конт)"
-    metrics(11) = "12_1 Приемка КД на ПК (шт)"
-    metrics(12) = "12_2 Приемка КД на ТСД (шт)"
-    metrics(13) = "13 Приемка КД (конт)"
-    metrics(14) = "14 Проклейка (шт)"
-    metrics(15) = "15 Расформирование ECOM (шт)"
-    metrics(16) = "16 Упаковка ТТ (шт)"
-    metrics(17) = "17 Сортировка ECOM (шт)"
-    metrics(18) = "18 Упаковка ECOM внешняя КС (заказ)"
-    metrics(19) = "19 Упаковка ECOM своя КС (заказ)"
-    metrics(20) = "20 Стикеровка (шт)"
-    metrics(21) = "21 Инвентаризация (шт)"
-    metrics(22) = "22 Доп. работы (мин)"
-    metrics(23) = "23 Копакинг (набор шт.)"
-    metrics(24) = "24 Коробочное размещение (кор)"
+    metrics(0) = "01 РћС‚Р±РѕСЂ ECOM (С€С‚)"
+    metrics(1) = "02 Р“СЂСѓРїРїРѕРІРѕР№ РѕС‚Р±РѕСЂ ECOM (С€С‚)"
+    metrics(2) = "03 РћС‚Р±РѕСЂ ECOM СЌРєСЃРїСЂРµСЃСЃ (С€С‚)"
+    metrics(3) = "04 РћС‚Р±РѕСЂ РєРѕРЅС‚РµР№РЅРµСЂР° (РєРѕРЅС‚)"
+    metrics(4) = "05 РћС‚Р±РѕСЂ РўРў ( РјР°РіР°Р·РёРЅ+РўР•РЎ+Р РµРєР»Р°РјР°) (С€С‚)"
+    metrics(5) = "06 РџРµСЂРµРјРµС‰РµРЅРёРµ С‚РѕРІР°СЂР° (РєРѕРЅС‚)"
+    metrics(6) = "07 РџРµСЂРµРјРµС‰РµРЅРёРµ РєРѕРЅС‚РµР№РЅРµСЂРѕРІ (РєРѕРЅС‚)"
+    metrics(7) = "08 РџСЂРёРµРјРєР° Р±РµР· РљРР— (С€С‚)"
+    metrics(8) = "09 РџСЂРёРµРјРєР° СЃ РљРР— (С€С‚)"
+    metrics(9) = "10_1 Р Р°Р·РјРµС‰РµРЅРёРµ (С€С‚)"
+    metrics(10) = "11 Р Р°Р·РјРµС‰РµРЅРёРµ (РєРѕРЅС‚)"
+    metrics(11) = "12_1 РџСЂРёРµРјРєР° РљР” РЅР° РџРљ (С€С‚)"
+    metrics(12) = "12_2 РџСЂРёРµРјРєР° РљР” РЅР° РўРЎР” (С€С‚)"
+    metrics(13) = "13 РџСЂРёРµРјРєР° РљР” (РєРѕРЅС‚)"
+    metrics(14) = "14 РџСЂРѕРєР»РµР№РєР° (С€С‚)"
+    metrics(15) = "15 Р Р°СЃС„РѕСЂРјРёСЂРѕРІР°РЅРёРµ ECOM (С€С‚)"
+    metrics(16) = "16 РЈРїР°РєРѕРІРєР° РўРў (С€С‚)"
+    metrics(17) = "17 РЎРѕСЂС‚РёСЂРѕРІРєР° ECOM (С€С‚)"
+    metrics(18) = "18 РЈРїР°РєРѕРІРєР° ECOM РІРЅРµС€РЅСЏСЏ РљРЎ (Р·Р°РєР°Р·)"
+    metrics(19) = "19 РЈРїР°РєРѕРІРєР° ECOM СЃРІРѕСЏ РљРЎ (Р·Р°РєР°Р·)"
+    metrics(20) = "20 РЎС‚РёРєРµСЂРѕРІРєР° (С€С‚)"
+    metrics(21) = "21 РРЅРІРµРЅС‚Р°СЂРёР·Р°С†РёСЏ (С€С‚)"
+    metrics(22) = "22 Р”РѕРї. СЂР°Р±РѕС‚С‹ (РјРёРЅ)"
+    metrics(23) = "23 РљРѕРїР°РєРёРЅРі (РЅР°Р±РѕСЂ С€С‚.)"
+    metrics(24) = "24 РљРѕСЂРѕР±РѕС‡РЅРѕРµ СЂР°Р·РјРµС‰РµРЅРёРµ (РєРѕСЂ)"
 
-    ' Нормы — metrics
+    ' РќРѕСЂРјС‹ вЂ” metrics
     Dim norms As Variant
     ReDim norms(0 To 24)
     norms(0) = 80
@@ -103,37 +103,37 @@ Sub GenerateAllReportsSideBySide()
     norms(23) = 350
     norms(24) = 60
 
-    ' === ЗАГОЛОВКИ: 53 элемента (0–52) ===
+    ' === Р—РђР“РћР›РћР’РљР: 53 СЌР»РµРјРµРЅС‚Р° (0вЂ“52) ===
     ReDim headers(0 To 52)
-    headers(0) = "Сотрудник"
-    headers(1) = "Часы"
+    headers(0) = "РЎРѕС‚СЂСѓРґРЅРёРє"
+    headers(1) = "Р§Р°СЃС‹"
 
-    ' Метрики: 25 шт > headers(2) to headers(26)
+    ' РњРµС‚СЂРёРєРё: 25 С€С‚ > headers(2) to headers(26)
     For j = 0 To 24
         headers(j + 2) = metrics(j)
     Next j
 
-    ' Нормы: 25 шт > headers(27) to headers(51)
+    ' РќРѕСЂРјС‹: 25 С€С‚ > headers(27) to headers(51)
     For j = 0 To 24
-        headers(j + 27) = "Норма " & (j + 1)
+        headers(j + 27) = "РќРѕСЂРјР° " & (j + 1)
     Next j
 
-    ' Итог > headers(52)
-    headers(52) = "Итог"
+    ' РС‚РѕРі > headers(52)
+    headers(52) = "РС‚РѕРі"
 
     For reportType = 1 To 3
         Select Case reportType
-            Case 1: colOffset = 0   ' Таблица 1
-            Case 2: colOffset = 56  ' Таблица 2
-            Case 3: colOffset = 112 ' Таблица 3
+            Case 1: colOffset = 0   ' РўР°Р±Р»РёС†Р° 1
+            Case 2: colOffset = 56  ' РўР°Р±Р»РёС†Р° 2
+            Case 3: colOffset = 112 ' РўР°Р±Р»РёС†Р° 3
         End Select
 
-        wsReport.Cells(1, 2 + colOffset).Value = IIf(reportType = 1, "Штат", IIf(reportType = 2, "Аутсорс", "Все сотрудники"))
+        wsReport.Cells(1, 2 + colOffset).Value = IIf(reportType = 1, "РЁС‚Р°С‚", IIf(reportType = 2, "РђСѓС‚СЃРѕСЂСЃ", "Р’СЃРµ СЃРѕС‚СЂСѓРґРЅРёРєРё"))
         wsReport.Cells(1, 2 + colOffset).Font.Bold = True
         wsReport.Cells(1, 2 + colOffset).Font.Size = 12
 
-        ' === ВЫВОД ЗАГОЛОВКОВ ===
-        wsReport.Cells(3, 1 + colOffset).Value = "№"
+        ' === Р’Р«Р’РћР” Р—РђР“РћР›РћР’РљРћР’ ===
+        wsReport.Cells(3, 1 + colOffset).Value = "в„–"
         With wsReport.Columns(1 + colOffset)
             .ColumnWidth = 5
             .HorizontalAlignment = xlCenter
@@ -164,18 +164,18 @@ Sub GenerateAllReportsSideBySide()
             wsReport.Cells(outputRow, 2 + colOffset).Value = empName
             wsReport.Cells(outputRow, 3 + colOffset).Value = hoursValue
 
-            ' Нормы в столбце 29 > 29 + colOffset
+            ' РќРѕСЂРјС‹ РІ СЃС‚РѕР»Р±С†Рµ 29 > 29 + colOffset
             Dim normStartCol As Long
             normStartCol = 29 + colOffset
 
-            ' нормы (столбцы 29–53)
+            ' РЅРѕСЂРјС‹ (СЃС‚РѕР»Р±С†С‹ 29вЂ“53)
             For j = 0 To 24
                 wsReport.Cells(outputRow, j + 29 + colOffset).Value = hoursValue * norms(j)
             Next j
 
             wsTD.Rows(8).UnMerge
 
-            ' формулы выполнения (%)
+            ' С„РѕСЂРјСѓР»С‹ РІС‹РїРѕР»РЅРµРЅРёСЏ (%)
             For j = 0 To 24
                 Dim foundCell As Range
                 Set foundCell = wsTD.Range("A8:XFD8").Find(metrics(j), LookIn:=xlValues, LookAt:=xlWhole)
@@ -185,13 +185,13 @@ Sub GenerateAllReportsSideBySide()
                     Dim offsetRow As Long: offsetRow = 0
 
                     Select Case metrics(j)
-                        Case "04 Отбор контейнера (конт)", _
-                             "06 Перемещение товара (конт)", _
-                             "07 Перемещение контейнеров (конт)", _
-                             "11 Размещение (конт)", _
-                             "13 Приемка КД (конт)", _
-                             "23 Копакинг (набор шт.)", _
-                             "24 Коробочное размещение (кор)"
+                        Case "04 РћС‚Р±РѕСЂ РєРѕРЅС‚РµР№РЅРµСЂР° (РєРѕРЅС‚)", _
+                             "06 РџРµСЂРµРјРµС‰РµРЅРёРµ С‚РѕРІР°СЂР° (РєРѕРЅС‚)", _
+                             "07 РџРµСЂРµРјРµС‰РµРЅРёРµ РєРѕРЅС‚РµР№РЅРµСЂРѕРІ (РєРѕРЅС‚)", _
+                             "11 Р Р°Р·РјРµС‰РµРЅРёРµ (РєРѕРЅС‚)", _
+                             "13 РџСЂРёРµРјРєР° РљР” (РєРѕРЅС‚)", _
+                             "23 РљРѕРїР°РєРёРЅРі (РЅР°Р±РѕСЂ С€С‚.)", _
+                             "24 РљРѕСЂРѕР±РѕС‡РЅРѕРµ СЂР°Р·РјРµС‰РµРЅРёРµ (РєРѕСЂ)"
                             targetColumn = foundCell.Column + 1
                         Case Else
                             targetColumn = foundCell.Column
@@ -210,7 +210,7 @@ Sub GenerateAllReportsSideBySide()
                 End If
             Next j
 
-            ' Сумма по метрикам (столбцы 4–28)
+            ' РЎСѓРјРјР° РїРѕ РјРµС‚СЂРёРєР°Рј (СЃС‚РѕР»Р±С†С‹ 4вЂ“28)
             Dim itogRange As String
             itogRange = wsReport.Cells(outputRow, 4 + colOffset).Address(False, False) & ":" & _
                         wsReport.Cells(outputRow, 28 + colOffset).Address(False, False)
@@ -234,7 +234,7 @@ NextEmployee:
             wsReport.Range(wsReport.Cells(4, 29 + colOffset), wsReport.Cells(lastDataRow, 53 + colOffset)).NumberFormat = "#,##0"
             wsReport.Range(wsReport.Cells(4, 54 + colOffset), wsReport.Cells(lastDataRow, 54 + colOffset)).NumberFormat = "0.00%"
 
-            ' Сортировка по "Итогу"
+            ' РЎРѕСЂС‚РёСЂРѕРІРєР° РїРѕ "РС‚РѕРіСѓ"
             With wsReport.Sort
                 .SortFields.Clear
                 .SortFields.Add Key:=wsReport.Range(wsReport.Cells(4, 54 + colOffset), wsReport.Cells(lastDataRow, 54 + colOffset)), _
@@ -244,13 +244,13 @@ NextEmployee:
                 .Apply
             End With
 
-            ' Нумерация
+            ' РќСѓРјРµСЂР°С†РёСЏ
             Dim numRow As Long
             For numRow = 4 To lastDataRow
                 wsReport.Cells(numRow, 1 + colOffset).Value = numRow - 3
             Next numRow
 
-            ' Общий итог
+            ' РћР±С‰РёР№ РёС‚РѕРі
             Dim totalRow As Long
             totalRow = lastDataRow + 2
 
@@ -259,18 +259,18 @@ NextEmployee:
                 .Font.Size = 16
                 .Interior.Color = RGB(221, 235, 247)
                 .Borders(xlEdgeTop).LineStyle = xlDouble
-                .Cells(1, 1).Value = "Общий итог"
+                .Cells(1, 1).Value = "РћР±С‰РёР№ РёС‚РѕРі"
                 .Cells(1, 1).HorizontalAlignment = xlLeft
             End With
 
             Dim avgRange As String
             avgRange = wsReport.Cells(4, 54 + colOffset).Address(False, False) & ":" & _
                        wsReport.Cells(lastDataRow, 54 + colOffset).Address(False, False)
-            wsReport.Cells(totalRow, 54 + colOffset).FormulaLocal = "=СРЗНАЧ(" & avgRange & ")"
+            wsReport.Cells(totalRow, 54 + colOffset).FormulaLocal = "=РЎР Р—РќРђР§(" & avgRange & ")"
             wsReport.Cells(totalRow, 54 + colOffset).NumberFormat = "0.00%"
             wsReport.Columns(54 + colOffset).ColumnWidth = 15
 
-            '  форматирование
+            '  С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ
             Dim fmtCol As Long
             For fmtCol = 4 To 28
                 With wsReport.Range(wsReport.Cells(4, fmtCol + colOffset), wsReport.Cells(lastDataRow, fmtCol + colOffset))
@@ -310,11 +310,11 @@ NextEmployee:
                 End With
             End With
 
-            ' скрытие
+            ' СЃРєСЂС‹С‚РёРµ
             wsReport.Range(wsReport.Columns(2 + colOffset), wsReport.Columns(53 + colOffset)).Hidden = True
             wsReport.Columns(2 + colOffset).AutoFit
 
-            '  рамка
+            '  СЂР°РјРєР°
             With wsReport.Range(wsReport.Cells(3, 1 + colOffset), wsReport.Cells(totalRow, 54 + colOffset))
                 .Borders.LineStyle = xlContinuous
                 .Borders.Color = RGB(200, 200, 200)
@@ -323,15 +323,15 @@ NextEmployee:
         End If
     Next reportType
 
-        ' === ЛИСТ "Выработка по потокам" ===
+        ' === Р›РРЎРў "Р’С‹СЂР°Р±РѕС‚РєР° РїРѕ РїРѕС‚РѕРєР°Рј" ===
     Dim wsFlow As Worksheet
     On Error Resume Next
-    Set wsFlow = ActiveWorkbook.Sheets("Выработка по потокам")
+    Set wsFlow = ActiveWorkbook.Sheets("Р’С‹СЂР°Р±РѕС‚РєР° РїРѕ РїРѕС‚РѕРєР°Рј")
     If Not wsFlow Is Nothing Then wsFlow.Delete
     On Error GoTo 0
 
     Set wsFlow = ActiveWorkbook.Sheets.Add(After:=wsReport)
-    wsFlow.Name = "Выработка по потокам"
+    wsFlow.Name = "Р’С‹СЂР°Р±РѕС‚РєР° РїРѕ РїРѕС‚РѕРєР°Рј"
 
     Dim pasteCol As Long: pasteCol = 1
 
@@ -350,7 +350,7 @@ NextEmployee:
 
     wsFlow.Cells.EntireColumn.Hidden = False
     wsFlow.Cells.EntireRow.Hidden = False
-    '  формат
+    '  С„РѕСЂРјР°С‚
     wsReport.Range("DL4").Copy
     For col = 3 To 28
         wsFlow.Columns(col).PasteSpecial Paste:=xlPasteFormats
@@ -371,14 +371,14 @@ NextEmployee:
     wsFlow.Columns("A:B").AutoFit
     wsFlow.Columns("AB:XFD").AutoFit
 
-    ' === СВОД ПО ПОТОКАМ ===
+    ' === РЎР’РћР” РџРћ РџРћРўРћРљРђРњ ===
     Dim summaryRow As Long
     summaryRow = wsReport.Cells(wsReport.Rows.Count, "CC").End(xlUp).Row + 2
 
-    wsReport.Cells(3, 169).Value = "Отбор"
-    wsReport.Cells(4, 169).Value = "Приемка"
-    wsReport.Cells(5, 169).Value = "Размещение"
-    wsReport.Cells(6, 169).Value = "Упаковка"
+    wsReport.Cells(3, 169).Value = "РћС‚Р±РѕСЂ"
+    wsReport.Cells(4, 169).Value = "РџСЂРёРµРјРєР°"
+    wsReport.Cells(5, 169).Value = "Р Р°Р·РјРµС‰РµРЅРёРµ"
+    wsReport.Cells(6, 169).Value = "РЈРїР°РєРѕРІРєР°"
 
     With wsReport.Range(wsReport.Cells(3, 169), wsReport.Cells(6, 169))
         .Font.Bold = True
@@ -417,7 +417,7 @@ NextEmployee:
         .Borders.Color = RGB(200, 200, 200)
     End With
 
-    ' Скрытие промежуточных столбцов
+    ' РЎРєСЂС‹С‚РёРµ РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅС‹С… СЃС‚РѕР»Р±С†РѕРІ
     wsReport.Range(wsReport.Columns(3), wsReport.Columns(53)).Hidden = True
     wsReport.Range(wsReport.Columns(59), wsReport.Columns(109)).Hidden = True
     wsReport.Range(wsReport.Columns(115), wsReport.Columns(165)).Hidden = True
@@ -430,7 +430,7 @@ CleanUp:
     Exit Sub
 
 ErrorHandler:
-    MsgBox "Ошибка: " & Err.Description & vbCrLf & "В процедуре GenerateAllReportsSideBySide", vbCritical
+    MsgBox "РћС€РёР±РєР°: " & Err.Description & vbCrLf & "Р’ РїСЂРѕС†РµРґСѓСЂРµ GenerateAllReportsSideBySide", vbCritical
     Resume CleanUp
 End Sub
 
